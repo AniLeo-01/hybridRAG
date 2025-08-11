@@ -1,4 +1,4 @@
-# HybridRAG with Neo4j and LangChain
+# HybridRAG with Neo4j
 
 A hybrid retrieval-augmented generation (RAG) system that combines vector search, fulltext search, and semantic search using Neo4j as the backend database.
 
