@@ -10,62 +10,23 @@ A hybrid retrieval-augmented generation (RAG) system that combines vector search
 - **LLM Pipeline**: Extensible pipeline for document retrieval and response generation
 - **Embedding Generation**: Support for OpenAI embeddings with fallback to random embeddings for testing
 
-## Project Structure
-
-```
-hybridrag-neo4j-langchain/
-├── README.md
-├── requirements.txt
-├── .env
-├── config.yaml
-├── data/
-│   └── dataset.json
-├── db/
-│   ├── create_indexes.cypher
-│   ├── load_data.cypher
-│   └── reset_db.cypher
-├── scripts/
-│   ├── run_ingest.py
-│   └── run_demo_query.py
-├── src/
-│   ├── __init__.py
-│   ├── config/
-│   │   └── settings.py
-│   ├── db/
-│   │   ├── connection.py
-│   │   └── ingestion.py
-│   ├── embeddings/
-│   │   ├── generator.py
-│   │   └── utils.py
-│   ├── retrieval/
-│   │   ├── neo4j_vector_store.py
-│   │   ├── neo4j_fulltext_retriever.py
-│   │   └── hybrid_retriever.py
-│   ├── llm/
-│   │   └── pipeline.py
-│   └── utils/
-│       └── logging.py
-└── notebooks/
-    └── demo.ipynb
-```
-
 ## Installation
 
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd hybridrag-neo4j-langchain
+cd hybridRAG
 ```
 
 2. Create a virtual environment:
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
 3. Install dependencies:
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 4. Set up environment variables:
@@ -96,13 +57,13 @@ LOG_LEVEL=INFO
 ### 1. Data Ingestion
 
 ```bash
-python scripts/run_ingest.py
+python3 scripts/run_ingest.py
 ```
 
 ### 2. Demo Queries
 
 ```bash
-python scripts/run_demo_query.py
+python3 scripts/run_demo_query.py
 ```
 
 ### 3. Jupyter Notebook
@@ -143,15 +104,3 @@ The system supports multiple search strategies:
 - **Embedding Layer**: Generates and manages document embeddings
 - **LLM Layer**: Orchestrates retrieval and generation
 - **Database Layer**: Neo4j integration for data storage and indexing
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License.
