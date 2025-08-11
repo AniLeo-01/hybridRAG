@@ -1,4 +1,4 @@
-# HybridRAG: Hybrid Retrieval-Augmented Generation System
+# HybridRAG with Neo4j
 
 A comprehensive hybrid retrieval-augmented generation (RAG) system that combines vector search, fulltext search, and semantic search strategies to provide accurate and contextually relevant responses.
 
@@ -32,18 +32,24 @@ Query → Hybrid Retriever → Context Preparation → LLM Generation → Respon
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd hybridRAG-1
+cd hybridRAG
 ```
 
 2. Create and activate a virtual environment:
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
 3. Install dependencies:
 ```bash
 pip install -r requirements.txt
+```
+
+4. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your Neo4j credentials and OpenAI API key
 ```
 
 ## Configuration
@@ -100,7 +106,7 @@ Ensure Neo4j is running and accessible at the configured URI.
 ### 2. Ingest Data
 
 ```bash
-python scripts/run_ingest.py
+python3 scripts/run_ingest.py
 ```
 
 This will:
@@ -112,9 +118,6 @@ This will:
 ```bash
 # Basic demo with hybrid strategy
 python scripts/run_demo_query.py
-
-# Compare different retrieval strategies
-python scripts/run_strategy_comparison.py
 ```
 
 ## Usage
@@ -241,19 +244,3 @@ The system creates the following Neo4j indexes:
 ### Debug Mode
 
 Enable debug output by modifying the ingestion script or adding logging configuration.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## License
-
-[Add your license information here]
-
-## Support
-
-For issues and questions, please open a GitHub issue or contact the maintainers.
