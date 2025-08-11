@@ -1,7 +1,3 @@
-"""
-Configuration settings for the hybridRAG system.
-"""
-
 import os
 import yaml
 from pathlib import Path
@@ -55,10 +51,7 @@ class Settings(BaseSettings):
         extra = "allow"
     
     def __init__(self, **kwargs):
-        # Initialize with environment variables first
         super().__init__(**kwargs)
-        
-        # Then load and override with config.yaml
         self._load_yaml_config()
     
     def _load_yaml_config(self):
@@ -123,14 +116,12 @@ class Settings(BaseSettings):
                             self.fulltext_index_label = fulltext_config.get('label', self.fulltext_index_label)
                             self.fulltext_index_properties = fulltext_config.get('properties', self.fulltext_index_properties)
                 
-                # print(f"✅ Configuration loaded from {config_path}")
-                
             except Exception as e:
-                print(f"⚠️ Warning: Could not load config.yaml: {e}")
-                print("   Using default configuration values")
+                print(f"Warning: Could not load config.yaml: {e}")
+                print("Using default configuration values")
         else:
-            print(f"⚠️ Warning: config.yaml not found at {config_path}")
-            print("   Using default configuration values")
+            print(f"Warning: config.yaml not found at {config_path}")
+            print("Using default configuration values")
 
 def get_settings() -> Settings:
     """Get application settings."""
