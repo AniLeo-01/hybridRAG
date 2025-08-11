@@ -22,12 +22,39 @@ class Neo4jIngestor:
 
     def run_cypher_file(self, session, file_path):
         with open(file_path, "r", encoding="utf-8") as f:
-            cypher_commands = f.read().split(";")
-            for command in cypher_commands:
-                command = command.strip()
-                if command:
-                    session.run(command)
-                    print(f"Executed: {command[:50]}...")
+            lines = f.readlines()
+            
+            # Process lines to build commands
+            current_command = ""
+            for line in lines:
+                line = line.strip()
+                
+                # Skip empty lines and pure comment lines
+                if not line or line.startswith("//") or line.startswith("--"):
+                    continue
+                
+                # Add line to current command
+                current_command += line + " "
+                
+                # If line ends with semicolon, execute the command
+                if line.endswith(";"):
+                    command = current_command.strip()
+                    if command:
+                        try:
+                            result = session.run(command)
+                            print(f"Executed: {command[:50]}...")
+                            # Print summary if available
+                            if hasattr(result, 'consume'):
+                                summary = result.consume()
+                                if summary.counters.indexes_added > 0:
+                                    print(f"  -> Created {summary.counters.indexes_added} indexes")
+                        except Exception as e:
+                            print(f"Error executing: {command[:50]}...")
+                            print(f"  Error: {e}")
+                            # Continue with other commands instead of failing completely
+                    
+                    # Reset for next command
+                    current_command = ""
 
     def ingest(self):
         with self.driver.session() as session:

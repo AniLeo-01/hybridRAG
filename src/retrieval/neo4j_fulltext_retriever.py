@@ -43,10 +43,10 @@ class Neo4jFulltextRetriever:
     def fulltext_search(self, query: str, index_name: str, top_k: int = 5) -> List[Tuple[Dict, float]]:
         """Perform fulltext search using the specified index."""
         with self.driver.session() as session:
-            query_cypher = f"""
+            cypher_query = f"""
             CALL db.index.fulltext.queryNodes(
                 '{index_name}',
-                $query
+                $search_text
             )
             YIELD node, score
             RETURN node, score
@@ -54,23 +54,23 @@ class Neo4jFulltextRetriever:
             LIMIT {top_k}
             """
             
-            result = session.run(query_cypher, query=query)
+            result = session.run(cypher_query, search_text=query)
             return [(record["node"], record["score"]) for record in result]
     
     def fuzzy_search(self, query: str, label: str, property: str, top_k: int = 5, 
                     similarity_threshold: float = 0.7) -> List[Tuple[Dict, float]]:
         """Perform fuzzy search using string similarity."""
         with self.driver.session() as session:
-            query_cypher = f"""
+            cypher_query = f"""
             MATCH (n:{label})
-            WITH n, apoc.text.fuzzyMatch(n.{property}, $query) as similarity
+            WITH n, apoc.text.fuzzyMatch(n.{property}, $search_text) as similarity
             WHERE similarity >= $threshold
             RETURN n, similarity as score
             ORDER BY similarity DESC
             LIMIT {top_k}
             """
             
-            result = session.run(query_cypher, query=query, threshold=similarity_threshold)
+            result = session.run(cypher_query, search_text=query, threshold=similarity_threshold)
             return [(record["n"], record["score"]) for record in result]
     
     def regex_search(self, pattern: str, label: str, property: str, top_k: int = 5) -> List[Tuple[Dict, float]]:
@@ -105,11 +105,11 @@ class Neo4jFulltextRetriever:
         with self.driver.session() as session:
             # This is a simplified semantic search - you might want to implement
             # more sophisticated text analysis
-            query_cypher = f"""
+            cypher_query = f"""
             MATCH (n:{label})
             WITH n, 
                  size([word IN split(toLower(n.{property}), ' ') 
-                       WHERE word IN split(toLower($query), ' ')]) as common_words,
+                       WHERE word IN split(toLower($search_text), ' ')]) as common_words,
                  size(split(toLower(n.{property}), ' ')) as total_words
             WHERE common_words > 0
             RETURN n, 
@@ -118,5 +118,5 @@ class Neo4jFulltextRetriever:
             LIMIT {top_k}
             """
             
-            result = session.run(query_cypher, query=query)
+            result = session.run(cypher_query, search_text=query)
             return [(record["n"], record["score"]) for record in result]

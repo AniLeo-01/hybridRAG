@@ -22,12 +22,12 @@ def main():
             user=settings.neo4j_user,
             password=settings.neo4j_password
         )
-        
+        # set weights
+        retriever.set_weights(vector_weight=0.6, fulltext_weight=0.4, semantic_weight=0.1)
         # Example queries
         queries = [
             "What is machine learning?",
-            "Explain neural networks",
-            "How does deep learning work?"
+            "Type 2 Diabetes"
         ]
         
         print("Running demo queries...")
@@ -37,6 +37,10 @@ def main():
             print(f"Results: {len(results)} found")
             for i, result in enumerate(results, 1):
                 print(f"  {i}. {result}")
+            # explain the retrieval
+            print(f"Explaining retrieval...")
+            explanation = retriever.explain_retrieval(query, top_k=3)
+            print(f"Explanation: {explanation}")
         
     except Exception as e:
         print(f"Error during demo queries: {e}")

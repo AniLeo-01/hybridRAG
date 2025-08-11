@@ -70,7 +70,7 @@ class Neo4jVectorStore:
         query_embedding = self.embedding_generator.generate_embedding(query)
         
         with self.driver.session() as session:
-            query_cypher = f"""
+            cypher_query = f"""
             CALL db.index.vector.queryNodes(
                 '{index_name}',
                 {top_k},
@@ -82,7 +82,7 @@ class Neo4jVectorStore:
             LIMIT {top_k}
             """
             
-            result = session.run(query_cypher, query_embedding=query_embedding)
+            result = session.run(cypher_query, query_embedding=query_embedding)
             return [(record["node"], record["score"]) for record in result]
     
     def hybrid_search(self, query: str, top_k: int = 5, label: str = "Document",
@@ -106,14 +106,14 @@ class Neo4jVectorStore:
     def _simple_fulltext_search(self, query: str, top_k: int, label: str) -> List[Tuple[Dict, float]]:
         """Simple fulltext search implementation."""
         with self.driver.session() as session:
-            query_cypher = f"""
+            cypher_query = f"""
             MATCH (n:{label})
-            WHERE n.text CONTAINS $query
+            WHERE n.text CONTAINS $search_text
             RETURN n, 0.5 as score
             LIMIT {top_k}
             """
             
-            result = session.run(query_cypher, query=query)
+            result = session.run(cypher_query, search_text=query)
             return [(record["n"], record["score"]) for record in result]
     
     def _combine_results(self, vector_results: List[Tuple[Dict, float]], 

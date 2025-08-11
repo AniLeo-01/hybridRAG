@@ -22,7 +22,6 @@ def main():
             user=settings.neo4j_user,
             password=settings.neo4j_password
         )
-        
         print("Starting data ingestion...")
         ingestor.ingest()
         print("Data ingestion completed successfully!")
