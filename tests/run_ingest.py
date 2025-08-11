@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Script to run data ingestion into Neo4j database.
-"""
-
-import os
 import sys
 from pathlib import Path
 

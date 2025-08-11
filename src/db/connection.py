@@ -1,4 +1,3 @@
-# graph/connection.py
 from neo4j import GraphDatabase
 from config.settings import get_settings
 

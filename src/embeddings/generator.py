@@ -1,7 +1,3 @@
-"""
-Embedding generation utilities for the hybridRAG system.
-"""
-
 import numpy as np
 from typing import List, Union
 from openai import OpenAI
