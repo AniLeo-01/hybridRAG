@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-Script to run medical-focused demo queries that match the available dataset.
-"""
-
 import os
 import sys
 from pathlib import Path
